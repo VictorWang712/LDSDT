@@ -7,7 +7,8 @@
     "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 pnpm --dir apps/site dev",
     "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 pnpm --dir apps/site build",
     "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 pnpm --dir apps/site preview",
-    "check": "cross-env ASTRO_TELEMETRY_DISABLED=1 pnpm --dir apps/site check",
+    "check": "pnpm contracts:check && cross-env ASTRO_TELEMETRY_DISABLED=1 pnpm --dir apps/site check",
+    "contracts:check": "pnpm --dir packages/contracts validate",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

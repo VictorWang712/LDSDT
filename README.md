@@ -9,6 +9,7 @@ of **LLM-Driven Software Development and Testing**.
 apps/site/           Astro + Starlight course website
 docs/course-design/  Internal teaching design specifications
 docs/decisions/      Architecture decision records
+packages/contracts/  Shared machine-readable course protocols
 ```
 
 Course assignments, shared contracts, and evaluation services will be added only

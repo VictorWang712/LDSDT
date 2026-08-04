@@ -1,0 +1,46 @@
+{
+  "schema_version": "ldsdt.evaluation-result/v1",
+  "run_id": "run-2026-00124",
+  "status": "failed",
+  "submitted_at": "2026-09-08T11:00:00Z",
+  "started_at": "2026-09-08T11:01:00Z",
+  "completed_at": "2026-09-08T11:04:00Z",
+  "submission": {
+    "team_id": "team-07",
+    "repository": "https://git.example.edu/team-07/stage-1.git",
+    "commit": "cccccccccccccccccccccccccccccccccccccccc",
+    "manifest_path": "ldsdt.yaml",
+    "manifest_sha256": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "allocation_id": "server-group-03"
+  },
+  "results": [
+    {
+      "test_id": "API-003",
+      "category": "api",
+      "visibility": "public",
+      "status": "passed",
+      "duration_ms": 810
+    },
+    {
+      "test_id": "API-004",
+      "category": "api",
+      "visibility": "private",
+      "status": "failed",
+      "duration_ms": 2840,
+      "error_code": "STREAM_MISSING_DONE"
+    },
+    {
+      "test_id": "LIFE-004",
+      "category": "lifecycle",
+      "visibility": "private",
+      "status": "not_run"
+    }
+  ],
+  "feedback": [
+    {
+      "code": "STREAM_MISSING_DONE",
+      "message": "The streaming response did not end with data: [DONE].",
+      "documentation": "/stages/model-deployment/troubleshooting/#stream-missing-done"
+    }
+  ]
+}

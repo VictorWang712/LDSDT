@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ldsdt:contracts:stage-1:deployment-manifest:v1",
+  "title": "LDSDT stage-one deployment manifest",
+  "description": "Platform-independent manifest for deploying a domestic LLM on the course-provided domestic accelerator platform.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "submission",
+    "model",
+    "runtime",
+    "service",
+    "capabilities",
+    "resources",
+    "artifacts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ldsdt.deployment/v1"
+    },
+    "submission": {
+      "$ref": "#/$defs/submission"
+    },
+    "model": {
+      "$ref": "#/$defs/model"
+    },
+    "runtime": {
+      "$ref": "#/$defs/runtime"
+    },
+    "service": {
+      "$ref": "#/$defs/service"
+    },
+    "capabilities": {
+      "$ref": "#/$defs/capabilities"
+    },
+    "resources": {
+      "$ref": "#/$defs/resources"
+    },
+    "artifacts": {
+      "$ref": "#/$defs/artifacts"
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^(?!/)(?![A-Za-z]:[\\\\/])(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+    },
+    "submission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage", "team_id"],
+      "properties": {
+        "stage": {
+          "const": "model-deployment"
+        },
+        "team_id": {
+          "$ref": "#/$defs/identifier"
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["registry_id", "precision", "quantization"],
+      "properties": {
+        "registry_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "precision": {
+          "type": "string",
+          "enum": ["fp32", "fp16", "bf16", "int8", "int4", "other"]
+        },
+        "quantization": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["backend", "version", "mode"],
+      "properties": {
+        "backend": {
+          "$ref": "#/$defs/identifier"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["native", "container"]
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host", "port_env", "health_path", "info_path", "chat_path"],
+      "properties": {
+        "host": {
+          "type": "string",
+          "enum": ["0.0.0.0", "::"]
+        },
+        "port_env": {
+          "const": "LDSDT_SERVICE_PORT"
+        },
+        "health_path": {
+          "const": "/healthz"
+        },
+        "info_path": {
+          "const": "/course/v1/info"
+        },
+        "chat_path": {
+          "const": "/v1/chat/completions"
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["streaming", "max_context_length"],
+      "properties": {
+        "streaming": {
+          "const": true
+        },
+        "max_context_length": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["accelerator_count"],
+      "properties": {
+        "accelerator_count": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["log_path"],
+      "properties": {
+        "log_path": {
+          "$ref": "#/$defs/relativePath"
+        }
+      }
+    }
+  }
+}
