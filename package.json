@@ -1,0 +1,19 @@
+{
+  "name": "ldsdt",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 pnpm --dir apps/site dev",
+    "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 pnpm --dir apps/site build",
+    "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 pnpm --dir apps/site preview",
+    "check": "cross-env ASTRO_TELEMETRY_DISABLED=1 pnpm --dir apps/site check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "cross-env": "10.1.0",
+    "prettier": "3.9.6",
+    "prettier-plugin-astro": "0.14.1"
+  }
+}

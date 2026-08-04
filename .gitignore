@@ -1,0 +1,19 @@
+node_modules/
+.pnpm-store/
+
+# Astro
+.astro/
+dist/
+
+# Environment and local tooling
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+*.log
+
+# IDE
+.idea/
+.vscode/
+!.vscode/extensions.json

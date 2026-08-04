@@ -1,0 +1,56 @@
+﻿---
+const base = import.meta.env.BASE_URL;
+const withBase = (path: string) => `${base}${path.replace(/^\/+/, '')}`;
+
+const stages = [
+  {
+    number: '01',
+    label: 'DEPLOY',
+    title: '让国产模型真正运行',
+    description: '在国产算力平台部署大语言模型，并交付可复现、可调用、可测量的推理服务。',
+    href: withBase('stages/model-deployment/'),
+  },
+  {
+    number: '02',
+    label: 'BUILD',
+    title: '把模型变成工程工具',
+    description: '基于上一阶段的模型服务，设计并实现具备真实开发能力的 AI Coding 工具。',
+    href: withBase('stages/ai-coding-tool/'),
+  },
+  {
+    number: '03',
+    label: 'DEVELOP',
+    title: '用自己的工具交付应用',
+    description: '在统一任务约束下开发可验收的应用，让工具能力最终落到软件成果上。',
+    href: withBase('stages/application-development/'),
+  },
+];
+---
+
+<section class="stage-section" aria-labelledby="stage-heading">
+  <div class="section-heading" data-reveal>
+    <p class="eyebrow">THE EXPERIMENTAL ARC</p>
+    <h2 id="stage-heading">三个阶段，一条可验证的工程链路</h2>
+    <p>每次交付都成为下一阶段的基础，最终形成从模型到软件系统的完整闭环。</p>
+  </div>
+
+  <ol class="stage-list">
+    {
+      stages.map((stage, index) => (
+        <li class="stage-item" data-reveal style={`--stage-index: ${index}`}>
+          <div class="stage-rail" aria-hidden="true">
+            <span>{stage.number}</span>
+          </div>
+          <article>
+            <p class="stage-label">{stage.label}</p>
+            <h3>{stage.title}</h3>
+            <p>{stage.description}</p>
+            <a href={stage.href}>
+              查看阶段说明 <span aria-hidden="true">↗</span>
+            </a>
+          </article>
+        </li>
+      ))
+    }
+  </ol>
+</section>
