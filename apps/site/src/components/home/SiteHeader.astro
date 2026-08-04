@@ -5,7 +5,14 @@ const withBase = (path: string) => `${base}${path.replace(/^\/+/, '')}`;
 
 <header class="site-header">
   <a class="brand" href={base} aria-label="LDSDT 课程首页">
-    <span class="brand-mark" aria-hidden="true">L</span>
+    <img
+      class="brand-mark"
+      src={withBase('brand/logo-square.svg')}
+      alt=""
+      aria-hidden="true"
+      width="670"
+      height="670"
+    />
     <span class="brand-copy">
       <strong>LDSDT</strong>
       <small>Software, directed by intelligence.</small>

@@ -1,8 +1,8 @@
+@import './fonts.css';
+
 :root {
-  --sl-font:
-    Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
-    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-  --sl-font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --sl-font: 'LXGW WenKai Screen', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --sl-font-mono: 'Code New Roman NFM', Consolas, monospace;
   --sl-color-accent-low: #172047;
   --sl-color-accent: #82a4ff;
   --sl-color-accent-high: #dce5ff;
@@ -42,6 +42,13 @@ header.header {
   letter-spacing: 0.12em;
 }
 
+.site-title img {
+  filter: invert(1);
+}
+
+:root[data-theme='light'] .site-title img {
+  filter: none;
+}
 .sl-markdown-content {
   font-size: 1rem;
   line-height: 1.82;

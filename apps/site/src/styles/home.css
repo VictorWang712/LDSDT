@@ -1,3 +1,5 @@
+@import './fonts.css';
+
 :root {
   color-scheme: dark;
   --ink: #f4f5f7;
@@ -11,10 +13,8 @@
   --accent-bright: #a8f0ff;
   --accent-deep: #506cff;
   --page-width: 1320px;
-  --font-sans:
-    Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
-    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --font-sans: 'LXGW WenKai Screen', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'Code New Roman NFM', Consolas, monospace;
 }
 
 * {
@@ -90,14 +90,12 @@ a {
 }
 
 .brand-mark {
-  display: grid;
-  width: 38px;
-  height: 38px;
-  place-items: center;
-  border: 1px solid var(--line-strong);
-  color: var(--surface);
-  background: var(--ink);
-  font: 700 0.92rem/1 var(--font-mono);
+  display: block;
+  width: 42px;
+  height: auto;
+  flex: 0 0 auto;
+  object-fit: contain;
+  filter: invert(1);
 }
 
 .brand-copy {

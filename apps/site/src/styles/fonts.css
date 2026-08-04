@@ -1,0 +1,31 @@
+@font-face {
+  font-family: 'LXGW WenKai Screen';
+  src: url('../assets/fonts/LXGWWenKaiScreen.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Code New Roman NFM';
+  src: url('../assets/fonts/CodeNewRomanNFM.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Code New Roman NFM';
+  src: url('../assets/fonts/CodeNewRomanNFM-Bold.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Code New Roman NFM';
+  src: url('../assets/fonts/CodeNewRomanNFM-Italic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}

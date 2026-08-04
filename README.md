@@ -6,8 +6,9 @@ of **LLM-Driven Software Development and Testing**.
 ## Repository structure
 
 ```text
-apps/site/       Astro + Starlight course website
-docs/decisions/  Architecture decision records
+apps/site/           Astro + Starlight course website
+docs/course-design/  Internal teaching design specifications
+docs/decisions/      Architecture decision records
 ```
 
 Course assignments, shared contracts, and evaluation services will be added only

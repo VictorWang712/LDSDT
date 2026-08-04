@@ -11,6 +11,10 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'LDSDT',
+      logo: {
+        src: './src/assets/brand/logo-square.svg',
+        alt: 'LDSDT',
+      },
       description: '大语言模型驱动的软件开发与测试实验课程',
       disable404Route: true,
       locales: {
@@ -33,6 +37,14 @@ export default defineConfig({
       lastUpdated: true,
       customCss: ['./src/styles/docs.css'],
       head: [
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'icon',
+            type: 'image/svg+xml',
+            href: `${base}favicon.svg`,
+          },
+        },
         {
           tag: 'meta',
           attrs: {
