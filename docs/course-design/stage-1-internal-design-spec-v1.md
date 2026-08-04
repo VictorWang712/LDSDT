@@ -583,7 +583,7 @@ SUBMITTED
     {
       "code": "STREAM_MISSING_DONE",
       "message": "The streaming response did not end with data: [DONE].",
-      "documentation": "/stages/model-deployment/troubleshooting/#stream-missing-done"
+      "documentation": "/model-deployment/week-1/#stream-missing-done"
     }
   ]
 }

@@ -1,13 +1,19 @@
-﻿import { defineConfig } from 'astro/config';
+import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 const site = process.env.SITE_URL ?? 'http://localhost:4321';
 const base = process.env.BASE_PATH ?? '/';
+const withBase = (path) => base.replace(/\/$/, '') + '/' + path.replace(/^\/+/, '');
 
 export default defineConfig({
   site,
   base,
   trailingSlash: 'always',
+  redirects: {
+    '/stages/model-deployment': withBase('model-deployment'),
+    '/stages/ai-coding-tool': withBase('tool-design'),
+    '/stages/application-development': withBase('application-development'),
+  },
   integrations: [
     starlight({
       title: 'LDSDT',
@@ -57,6 +63,7 @@ export default defineConfig({
         { label: '课程首页', link: '/' },
         {
           label: '课程',
+          collapsed: false,
           items: [
             { label: '课程介绍', slug: 'course/about' },
             { label: '实验总览', slug: 'course/overview' },
@@ -64,6 +71,7 @@ export default defineConfig({
         },
         {
           label: '开始实验',
+          collapsed: false,
           items: [
             { label: '开始之前', slug: 'getting-started' },
             { label: '环境与工具', slug: 'getting-started/environment' },
@@ -71,15 +79,37 @@ export default defineConfig({
           ],
         },
         {
-          label: '实验阶段',
+          label: '模型部署',
+          collapsed: false,
           items: [
-            { label: '模型部署', slug: 'stages/model-deployment' },
-            { label: 'AI Coding 工具', slug: 'stages/ai-coding-tool' },
-            { label: '应用开发', slug: 'stages/application-development' },
+            { label: '阶段总览', slug: 'model-deployment' },
+            { label: 'Week 1：模型部署', slug: 'model-deployment/week-1' },
+          ],
+        },
+        {
+          label: '工具设计',
+          collapsed: false,
+          items: [
+            { label: '阶段总览', slug: 'tool-design' },
+            { label: 'Week 2：工具设计（一）', slug: 'tool-design/week-2' },
+            { label: 'Week 3：工具设计（二）', slug: 'tool-design/week-3' },
+            { label: 'Week 4：工具设计（三）', slug: 'tool-design/week-4' },
+          ],
+        },
+        {
+          label: '应用开发',
+          collapsed: false,
+          items: [
+            { label: '阶段总览', slug: 'application-development' },
+            { label: 'Week 5：应用开发（一）', slug: 'application-development/week-5' },
+            { label: 'Week 6：应用开发（二）', slug: 'application-development/week-6' },
+            { label: 'Week 7：应用开发（三）', slug: 'application-development/week-7' },
+            { label: 'Week 8：应用开发（四）', slug: 'application-development/week-8' },
           ],
         },
         {
           label: '资源',
+          collapsed: false,
           items: [
             { label: '资源索引', slug: 'resources' },
             { label: '实验文档模板', slug: 'resources/lab-document-template' },
@@ -87,7 +117,7 @@ export default defineConfig({
         },
         {
           label: '规范与政策',
-          collapsed: true,
+          collapsed: false,
           items: [
             { label: '课程规范', slug: 'policies' },
             { label: 'AI 使用与学术诚信', slug: 'policies/ai-and-integrity' },

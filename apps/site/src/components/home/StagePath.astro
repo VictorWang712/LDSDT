@@ -1,4 +1,4 @@
-﻿---
+---
 const base = import.meta.env.BASE_URL;
 const withBase = (path: string) => `${base}${path.replace(/^\/+/, '')}`;
 
@@ -8,21 +8,21 @@ const stages = [
     label: 'DEPLOY',
     title: '让国产模型真正运行',
     description: '在国产算力平台部署大语言模型，并交付可复现、可调用、可测量的推理服务。',
-    href: withBase('stages/model-deployment/'),
+    href: withBase('model-deployment/'),
   },
   {
     number: '02',
     label: 'BUILD',
     title: '把模型变成工程工具',
     description: '基于上一阶段的模型服务，设计并实现具备真实开发能力的 AI Coding 工具。',
-    href: withBase('stages/ai-coding-tool/'),
+    href: withBase('tool-design/'),
   },
   {
     number: '03',
     label: 'DEVELOP',
     title: '用自己的工具交付应用',
     description: '在统一任务约束下开发可验收的应用，让工具能力最终落到软件成果上。',
-    href: withBase('stages/application-development/'),
+    href: withBase('application-development/'),
   },
 ];
 ---
