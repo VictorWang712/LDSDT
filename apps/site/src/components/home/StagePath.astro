@@ -1,56 +1,60 @@
 ---
 const base = import.meta.env.BASE_URL;
 const withBase = (path: string) => `${base}${path.replace(/^\/+/, '')}`;
-
 const stages = [
   {
     number: '01',
     label: 'DEPLOY',
     title: '让国产模型真正运行',
-    description: '在国产算力平台部署大语言模型，并交付可复现、可调用、可测量的推理服务。',
+    description: '在国产算力平台部署大语言模型，交付可复现、可调用、可测量的推理服务。',
     href: withBase('model-deployment/'),
   },
   {
     number: '02',
     label: 'BUILD',
     title: '把模型变成工程工具',
-    description: '基于上一阶段的模型服务，设计并实现具备真实开发能力的 AI Coding 工具。',
+    description: '基于模型服务设计并实现具备真实开发能力的 AI Coding 工具。',
     href: withBase('tool-design/'),
   },
   {
     number: '03',
-    label: 'DEVELOP',
+    label: 'DELIVER',
     title: '用自己的工具交付应用',
-    description: '在统一任务约束下开发可验收的应用，让工具能力最终落到软件成果上。',
+    description: '在统一约束下开发可验收应用，让工具能力最终落到真实的软件成果。',
     href: withBase('application-development/'),
   },
 ];
 ---
 
-<section class="stage-section" aria-labelledby="stage-heading">
-  <div class="section-heading" data-reveal>
-    <p class="eyebrow">THE EXPERIMENTAL ARC</p>
-    <h2 id="stage-heading">三个阶段，一条可验证的工程链路</h2>
-    <p>每次交付都成为下一阶段的基础，最终形成从模型到软件系统的完整闭环。</p>
+<section
+  class="viewport-section stage-section"
+  id="course-route"
+  aria-labelledby="stage-heading"
+>
+  <div class="glass-surface stage-surface" data-reveal>
+    <div class="section-index"><span>02</span><p>THE EXPERIMENTAL ARC</p></div>
+    <div class="stage-content">
+      <div class="stage-heading section-heading-copy">
+        <p class="eyebrow">MODEL · TOOL · SYSTEM</p><h2 id="stage-heading">
+          三个阶段，一条可验证的工程链路。
+        </h2>
+      </div>
+      <ol class="stage-list">
+        {
+          stages.map((stage) => (
+            <li class="stage-item">
+              <a href={stage.href}>
+                <span class="stage-label">{stage.label}</span>
+                <>
+                  <h3>{stage.title}</h3>
+                  <p>{stage.description}</p>
+                  <span class="stage-link">查看阶段说明</span>
+                </>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
   </div>
-
-  <ol class="stage-list">
-    {
-      stages.map((stage, index) => (
-        <li class="stage-item" data-reveal style={`--stage-index: ${index}`}>
-          <div class="stage-rail" aria-hidden="true">
-            <span>{stage.number}</span>
-          </div>
-          <article>
-            <p class="stage-label">{stage.label}</p>
-            <h3>{stage.title}</h3>
-            <p>{stage.description}</p>
-            <a href={stage.href}>
-              查看阶段说明 <span aria-hidden="true">↗</span>
-            </a>
-          </article>
-        </li>
-      ))
-    }
-  </ol>
 </section>

@@ -7,3 +7,4 @@ allowBuilds:
   sharp: true
 virtualStoreDir: node_modules/.pnpm-workspace-store
 enableGlobalVirtualStore: false
+storeDir: .pnpm-store

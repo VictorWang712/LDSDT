@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightThemeRapide from 'starlight-theme-rapide';
 
 const site = process.env.SITE_URL ?? 'http://localhost:4321';
 const base = process.env.BASE_PATH ?? '/';
@@ -16,6 +17,7 @@ export default defineConfig({
   },
   integrations: [
     starlight({
+      plugins: [starlightThemeRapide()],
       title: 'LDSDT',
       logo: {
         src: './src/assets/brand/logo-square.svg',

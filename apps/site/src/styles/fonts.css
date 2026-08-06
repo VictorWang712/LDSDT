@@ -29,3 +29,11 @@
   font-weight: 400;
   font-display: swap;
 }
+
+@font-face {
+  font-family: 'AIDeep';
+  src: url('../assets/fonts/AIDEEP.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
