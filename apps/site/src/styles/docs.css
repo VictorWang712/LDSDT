@@ -4,3 +4,11 @@
   --sl-font: 'LXGW WenKai Screen', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --sl-font-mono: 'Code New Roman NFM', Consolas, monospace;
 }
+
+.site-title img {
+  filter: none;
+}
+
+:root[data-theme='dark'] .site-title img {
+  filter: invert(1);
+}

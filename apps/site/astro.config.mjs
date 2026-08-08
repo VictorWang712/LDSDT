@@ -18,10 +18,10 @@ export default defineConfig({
   integrations: [
     starlight({
       plugins: [starlightThemeRapide()],
-      title: 'LDSDT',
+      title: '大语言模型驱动的软件开发与测试',
       logo: {
-        src: './src/assets/brand/logo-square.svg',
-        alt: 'LDSDT',
+        src: './src/assets/brand/course-logo.svg',
+        alt: 'CS3297M 课程 Logo',
       },
       description: '大语言模型驱动的软件开发与测试实验课程',
       disable404Route: true,
