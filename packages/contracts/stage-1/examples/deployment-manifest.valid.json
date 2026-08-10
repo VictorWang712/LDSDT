@@ -29,6 +29,6 @@
     "accelerator_count": 1
   },
   "artifacts": {
-    "log_path": ".ldsdt/logs/service.log"
+    "log_path": "var/log/model-service.log"
   }
 }

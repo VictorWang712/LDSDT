@@ -188,7 +188,7 @@
         },
         "manifest_path": {
           "type": "string",
-          "const": "ldsdt.yaml"
+          "const": "model-service/deployment.yaml"
         },
         "manifest_sha256": {
           "$ref": "#/$defs/sha256"

@@ -9,7 +9,7 @@
     "team_id": "team-07",
     "repository": "https://git.example.edu/team-07/stage-1.git",
     "commit": "cccccccccccccccccccccccccccccccccccccccc",
-    "manifest_path": "ldsdt.yaml",
+    "manifest_path": "model-service/deployment.yaml",
     "manifest_sha256": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
     "allocation_id": "server-group-03"
   },
