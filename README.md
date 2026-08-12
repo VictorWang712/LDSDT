@@ -9,11 +9,12 @@ of **LLM-Driven Software Development and Testing**.
 apps/site/           Astro + Starlight course website
 docs/course-design/  Internal teaching design specifications
 docs/decisions/      Architecture decision records
-packages/contracts/  Shared machine-readable course protocols
 ```
 
-Course assignments, shared contracts, and evaluation services will be added only
-when their requirements are stable.
+The course project asks each team to build an end-to-end autonomous software
+development and testing system. Assignment starter kits, task specifications,
+shared protocols, and evaluation services will be added when their interfaces
+are stable.
 
 ## Prerequisites
 

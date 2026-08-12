@@ -4,24 +4,25 @@ const withBase = (path: string) => `${base}${path.replace(/^\/+/, '')}`;
 const stages = [
   {
     number: '01',
-    label: 'DEPLOY',
-    title: '让国产模型真正运行',
-    description: '在国产算力平台部署大语言模型，交付可复现、可调用、可测量的推理服务。',
-    href: withBase('model-deployment/'),
+    label: 'REPRESENT',
+    title: '让需求与设计可执行',
+    description:
+      '构建运行时、需求 IR 与接口规约，把自然语言任务转化为机器可消费的工程产物。',
+    href: withBase('labs/week-2/'),
   },
   {
     number: '02',
-    label: 'BUILD',
-    title: '把模型变成工程工具',
-    description: '基于模型服务设计并实现具备真实开发能力的 AI Coding 工具。',
-    href: withBase('tool-design/'),
+    label: 'ENGINEER',
+    title: '让系统自主开发与测试',
+    description: '实现代码生成、测试执行和调试修复，让反馈真正驱动软件仓库持续演化。',
+    href: withBase('labs/week-4/'),
   },
   {
     number: '03',
-    label: 'DELIVER',
-    title: '用自己的工具交付应用',
-    description: '在统一约束下开发可验收应用，让工具能力最终落到真实的软件成果。',
-    href: withBase('application-development/'),
+    label: 'EVALUATE',
+    title: '在未见任务上验证系统',
+    description: '串联全部模块，以公开任务迭代、以私有任务检验端到端自主性与泛化能力。',
+    href: withBase('labs/week-7/'),
   },
 ];
 ---
@@ -35,8 +36,8 @@ const stages = [
     <div class="section-index"><span>02</span><p>THE EXPERIMENTAL ARC</p></div>
     <div class="stage-content">
       <div class="stage-heading section-heading-copy">
-        <p class="eyebrow">MODEL · TOOL · SYSTEM</p><h2 id="stage-heading">
-          三个阶段，一条可验证的工程链路。
+        <p class="eyebrow">SPECIFY · BUILD · VERIFY</p><h2 id="stage-heading">
+          八周递进，构建一套自主软件工程系统。
         </h2>
       </div>
       <ol class="stage-list">

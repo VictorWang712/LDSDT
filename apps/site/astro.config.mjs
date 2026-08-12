@@ -4,17 +4,11 @@ import starlightThemeRapide from 'starlight-theme-rapide';
 
 const site = process.env.SITE_URL ?? 'http://localhost:4321';
 const base = process.env.BASE_PATH ?? '/';
-const withBase = (path) => base.replace(/\/$/, '') + '/' + path.replace(/^\/+/, '');
 
 export default defineConfig({
   site,
   base,
   trailingSlash: 'always',
-  redirects: {
-    '/stages/model-deployment': withBase('model-deployment'),
-    '/stages/ai-coding-tool': withBase('tool-design'),
-    '/stages/application-development': withBase('application-development'),
-  },
   integrations: [
     starlight({
       plugins: [starlightThemeRapide()],
@@ -69,6 +63,7 @@ export default defineConfig({
           items: [
             { label: '课程介绍', slug: 'course/about' },
             { label: '实验总览', slug: 'course/overview' },
+            { label: '成绩评定', slug: 'course/assessment' },
           ],
         },
         {
@@ -81,32 +76,18 @@ export default defineConfig({
           ],
         },
         {
-          label: '模型部署',
+          label: '八周实验',
           collapsed: false,
           items: [
-            { label: '阶段总览', slug: 'model-deployment' },
-            { label: 'Week 1：模型部署', slug: 'model-deployment/week-1' },
-          ],
-        },
-        {
-          label: '工具设计',
-          collapsed: false,
-          items: [
-            { label: '阶段总览', slug: 'tool-design' },
-            { label: 'Week 2：工具设计（一）', slug: 'tool-design/week-2' },
-            { label: 'Week 3：工具设计（二）', slug: 'tool-design/week-3' },
-            { label: 'Week 4：工具设计（三）', slug: 'tool-design/week-4' },
-          ],
-        },
-        {
-          label: '应用开发',
-          collapsed: false,
-          items: [
-            { label: '阶段总览', slug: 'application-development' },
-            { label: 'Week 5：应用开发（一）', slug: 'application-development/week-5' },
-            { label: 'Week 6：应用开发（二）', slug: 'application-development/week-6' },
-            { label: 'Week 7：应用开发（三）', slug: 'application-development/week-7' },
-            { label: 'Week 8：应用开发（四）', slug: 'application-development/week-8' },
+            { label: '实验路线', slug: 'labs' },
+            { label: 'Week 1：运行时与基线', slug: 'labs/week-1' },
+            { label: 'Week 2：需求理解', slug: 'labs/week-2' },
+            { label: 'Week 3：架构与接口', slug: 'labs/week-3' },
+            { label: 'Week 4：软件实现', slug: 'labs/week-4' },
+            { label: 'Week 5：测试设计', slug: 'labs/week-5' },
+            { label: 'Week 6：调试修复', slug: 'labs/week-6' },
+            { label: 'Week 7：公开任务', slug: 'labs/week-7' },
+            { label: 'Week 8：私有评测', slug: 'labs/week-8' },
           ],
         },
         {
@@ -114,7 +95,7 @@ export default defineConfig({
           collapsed: false,
           items: [
             { label: '资源索引', slug: 'resources' },
-            { label: '实验文档模板', slug: 'resources/lab-document-template' },
+            { label: '核心概念', slug: 'resources/concepts' },
           ],
         },
         {
