@@ -1,20 +1,16 @@
 # LLM-Driven Software Development and Testing
 
-The source repository for the course website and future teaching infrastructure
-of **LLM-Driven Software Development and Testing**.
+The source repository for the **LLM-Driven Software Development and Testing**
+course website.
 
 ## Repository structure
 
 ```text
-apps/site/           Astro + Starlight course website
-docs/course-design/  Internal teaching design specifications
-docs/decisions/      Architecture decision records
+apps/site/  Astro + Starlight course website
 ```
 
-The course project asks each team to build an end-to-end autonomous software
-development and testing system. Assignment starter kits, task specifications,
-shared protocols, and evaluation services will be added when their interfaces
-are stable.
+The student starter kit, assignment implementation, and private evaluation
+infrastructure are maintained in separate repositories.
 
 ## Prerequisites
 
