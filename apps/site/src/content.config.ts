@@ -4,11 +4,10 @@ import { docsSchema } from '@astrojs/starlight/schema';
 
 export const collections = {
   docs: defineCollection({
-    // Explicit publication allowlist: add a document here only after review.
-    // Excluded documents remain local source files, without routes or search entries.
+    // Publish all course and laboratory documents.
     loader: glob({
       base: './src/content/docs',
-      pattern: ['labs/week-1.md'],
+      pattern: ['course/*.md', 'labs/lab-*.md'],
     }),
     schema: docsSchema(),
   }),
