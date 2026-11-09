@@ -1,0 +1,467 @@
+---
+title: Lab 0 - 环境配置与工具上手
+description: 装好全部工具，建立自己的实验仓库，写出第一个调用 Qwen 智能体的 iCode 工作流，跑通评测、数据收集与提交流程。
+---
+
+import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+## 目标
+
+完成本 Lab 后，你应当：
+
+- 在自己的电脑上装好 Git、uv、iCode，以及自己角色要用的辅助开发工具；
+- 拥有一个自己的实验仓库，`ldsdt doctor` 全部通过；
+- 在辅助开发工具的帮助下，写出第一个 iCode 工作流：读入一份需求文档，让一个 Qwen 智能体列出其中的全部功能需求；
+- 跑通「本地评测 → 收集会话记录 → 提交」的完整流程。后面每个 Lab 都走这条流程。
+
+| 发布                   | 课上验收                   | 截止                     |
+| ---------------------- | -------------------------- | ------------------------ |
+| 11 月 13 日（第 1 周） | 11 月 20 日（第 2 周课上） | 11 月 26 日（周四）23:59 |
+
+:::note[谁做什么]
+**A 和 B** 各自完成本页全部步骤，各有一个自己的仓库。**C** 不需要自己的仓库，完成[第 9 步](#9-c-的任务)即可。
+:::
+
+## 背景知识
+
+### 你要搭建的系统长什么样
+
+整个系统是 iCode 里一个 ID 为 `ldsdt` 的**工作流**，代码放在仓库的 `.chrys/workflows/ldsdt/ldsdt.py`。评测工具这样调用它：
+
+1. 把一份需求文档复制到一个**运行目录**里，例如 `runs/lab0/todo-cli/`；
+2. 启动你的工作流，输入是一段 JSON，告诉它需求文档在哪、运行目录在哪、这是第几个 Lab：
+
+   ```json
+   { "requirement": "<需求文档的绝对路径>", "run_dir": "<运行目录的绝对路径>", "lab": 0 }
+   ```
+
+3. 工作流结束后，检查运行目录里有没有本 Lab 要求的产物，并据此打分。
+
+工作流内部怎么组织（有几个节点、提示词怎么写、要不要校验和重试）完全由你决定。评测工具只看运行目录。
+
+### iCode 工作流的基本概念
+
+- **节点**：工作流由节点组成。**Python 节点**运行一个 Python 函数，适合做解析输入、读写文件、检查结果这类确定性的工作；**智能体节点**把上一个节点输出的文字交给一个智能体（大模型加工具），等它完成任务后，把它的最终回复交给下一个节点。
+- **智能体配置**：智能体是什么角色、能用哪些工具，写在仓库 `agents/` 下的 YAML 文件里。运行 `uv run ldsdt sync` 会把它们复制到 iCode 的配置目录，并统一绑定课程的 Qwen 模型配置 `ldsdt-qwen`。
+- **连线**：用 `wf.chain(a, b, c)` 把节点依次连起来，数据沿着连线往下传。
+
+模版仓库里的 [`docs/icode-workflow-cheatsheet.md`](https://github.com/VictorWang712/LDSDT-experiment-lab/blob/main/docs/icode-workflow-cheatsheet.md) 是本课程用到的 iCode 工作流写法速查表；[`agents/README.md`](https://github.com/VictorWang712/LDSDT-experiment-lab/blob/main/agents/README.md) 说明了智能体配置的写法。iCode 的完整文档在 [iCode 仓库的 `docs/zh-Hans/`](https://github.com/openJiuwen-ai/iCode/tree/main/docs/zh-Hans) 下。
+
+### 两种模型，不要混用
+
+|              | 用途                                 | 用什么                                                          |
+| ------------ | ------------------------------------ | --------------------------------------------------------------- |
+| 辅助开发模型 | 帮**你**写工作流、智能体配置和提示词 | A：AiWork 自带的 DeepSeek-Flash；B：iCode 中配置的 DS-4.1-flash |
+| 系统内部模型 | 在**你的系统**里运行的智能体         | 只用 Qwen3.8-27B（模型配置 `ldsdt-qwen`，小组 Key）             |
+
+`ldsdt sync` 会自动把 `agents/` 下的智能体绑定到 `ldsdt-qwen`，你不用管。需要注意的是**你自己和辅助工具聊天时用的模型**，见第 6 步。
+
+## 开始前的准备
+
+- **一台电脑**：macOS（Apple 芯片或 Intel 均可），或 64 位 x86 处理器的 Windows 10/11。暂不支持 ARM 处理器的 Windows。
+- **一个 GitHub 账号**，并确认能在这台电脑上推送代码。
+- **课程发放的信息**（第 1 周课上分发）：
+  - 组号（例如 `G07`）；
+  - 小组的 Qwen API Key 和百炼接口地址（A、B 共用）；
+  - B：个人的 DS-4.1-flash API Key；
+  - A：AiWork 的安装包与账号。
+  - 研究编号（第 8 步 `ldsdt collect` 用）。
+- **网络**：安装过程需要访问 GitHub 和 Python 软件源。校园网下一般没有问题。
+
+:::caution[保护好 Key]
+API Key 只能放在环境变量（或 iCode 的本机配置）里。**不要写进仓库里的任何文件，不要发到群里，不要截图。** Key 泄露后请立即联系助教更换。
+:::
+
+## 操作步骤
+
+下面的命令都在**终端**里运行：macOS 用「终端」应用，Windows 在开始菜单搜索「终端」（Windows Terminal），打开后默认就是 PowerShell。代码块右上角有复制按钮。
+
+:::tip
+每当步骤里写「**重新打开终端**」，请关掉所有终端窗口再开一个新的。新装的命令和新设的环境变量，只在新打开的终端里生效。
+:::
+
+### 1. 安装 Git 和 uv
+
+[uv](https://docs.astral.sh/uv/) 是 Python 的包与环境管理工具。实验仓库用 Python 3.12，由 uv 自动下载，**不需要你另外安装 Python**。
+
+<Tabs syncKey="os">
+<TabItem label="macOS">
+
+先安装 Xcode 命令行工具（其中包含 Git，Apple 芯片的 Mac 安装 iCode 也需要它）。如果弹出安装窗口，点「安装」并等待完成；如果提示已经安装，直接下一步：
+
+```bash
+xcode-select --install
+```
+
+然后安装 uv：
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**重新打开终端**，检查：
+
+```bash
+git --version
+uv --version
+```
+
+</TabItem>
+<TabItem label="Windows">
+
+安装 Git：
+
+```powershell
+winget install --id Git.Git -e --source winget
+```
+
+如果提示找不到 `winget`，就从 [git-scm.com](https://git-scm.com/download/win) 下载安装包，一路使用默认选项。
+
+然后安装 uv：
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+**重新打开终端**，检查：
+
+```powershell
+git --version
+uv --version
+```
+
+</TabItem>
+</Tabs>
+
+### 2. 安装 iCode
+
+A、B、C 都需要安装 iCode：B 用它辅助开发，所有人的系统都运行在它上面。
+
+```bash
+uv tool install iCode-TUI
+uv tool update-shell
+```
+
+**重新打开终端**，检查：
+
+```bash
+icode --version
+```
+
+应输出 `0.33.0` 或更高的版本号。
+
+:::note[iCode 课程版]
+课程将提供一个浙江大学课程定制版的 iCode。发布后本节的安装命令会更新，届时请按新命令重新安装。
+:::
+
+### 3. 设置环境变量
+
+把课程发的信息存成环境变量。变量名必须和下面完全一致：
+
+| 变量名                | 值                                       | 谁需要 |
+| --------------------- | ---------------------------------------- | ------ |
+| `LDSDT_QWEN_API_KEY`  | 小组的 Qwen API Key                      | A、B   |
+| `LDSDT_QWEN_BASE_URL` | 小组的百炼接口地址（以 `https://` 开头） | A、B   |
+| `DEEPSEEK_API_KEY`    | 个人的 DS-4.1-flash API Key              | B      |
+
+<Tabs syncKey="os">
+<TabItem label="macOS">
+
+用文本编辑器打开 shell 的配置文件：
+
+```bash
+touch ~/.zshrc && open -e ~/.zshrc
+```
+
+在文件末尾加上下面几行，把引号里的内容换成你自己的值，保存并关闭：
+
+```bash
+export LDSDT_QWEN_API_KEY="小组的 Qwen Key"
+export LDSDT_QWEN_BASE_URL="小组的百炼接口地址"
+export DEEPSEEK_API_KEY="你的 DS-4.1-flash Key"   # 只有 B 需要
+```
+
+**重新打开终端**，检查（只显示是否已设置，不会显示 Key 本身）：
+
+```bash
+for v in LDSDT_QWEN_API_KEY LDSDT_QWEN_BASE_URL DEEPSEEK_API_KEY; do [ -n "${(P)v}" ] && echo "$v 已设置" || echo "$v 未设置"; done
+```
+
+</TabItem>
+<TabItem label="Windows">
+
+1. 在开始菜单搜索「**编辑账户的环境变量**」并打开；
+2. 在「用户变量」一栏点「新建」，依次添加上表中的变量（B 需要三个，A 需要前两个）；
+3. 点「确定」保存，然后**重新打开终端**。
+
+检查（只显示是否已设置，不会显示 Key 本身）：
+
+```powershell
+"LDSDT_QWEN_API_KEY","LDSDT_QWEN_BASE_URL","DEEPSEEK_API_KEY" | ForEach-Object { if ([Environment]::GetEnvironmentVariable($_)) { "$_ 已设置" } else { "$_ 未设置" } }
+```
+
+</TabItem>
+</Tabs>
+
+用图形界面或文本编辑器填写，Key 不会留在终端的命令历史里。
+
+### 4. 建立自己的实验仓库
+
+每人一个**私有**仓库：A 的叫 `<组号>-aiwork`，B 的叫 `<组号>-icode`，例如 `G07-aiwork`。下面以 B 的 `G07-icode` 为例，A 把名字换成自己的即可。
+
+<Steps>
+
+1. 在 GitHub 上新建仓库：右上角「+」→「New repository」，名称填 `G07-icode`，选择 **Private**，**不要**勾选添加 README、.gitignore 或 License，点「Create repository」。
+
+2. 选一个放代码的文件夹（路径里最好不要有中文和空格，例如 Windows 上的 `C:\ldsdt`），在终端进入这个文件夹，然后下载模版仓库，并把它推送到你刚建的仓库（把 `<你的用户名>` 换成你的 GitHub 用户名）：
+
+   ```bash
+   git clone https://github.com/VictorWang712/LDSDT-experiment-lab.git G07-icode
+   cd G07-icode
+   git remote rename origin upstream
+   git remote add origin https://github.com/<你的用户名>/G07-icode.git
+   git push -u origin main
+   ```
+
+   这样你的仓库有两个远程：`origin` 是你自己的仓库，你的提交推送到这里；`upstream` 是课程的模版仓库，课程更新评测工具和说明时，你用 `git pull upstream main` 拉取。
+
+   第一次推送时 Git 会要求登录 GitHub：Windows 上会弹出浏览器窗口；macOS 上如果提示输入密码，请见[常见问题](#推送时提示输入密码或认证失败)。
+
+3. 在 GitHub 仓库页面打开「Settings」→「Collaborators」→「Add people」，添加助教的账号 `VictorWang712`。官方复评需要读取你的仓库。
+
+</Steps>
+
+:::caution
+不要用 GitHub 的「Fork」或「Use this template」：前者只能建公开仓库，其他人能看到你的代码；后者会丢掉提交历史，之后无法用 `git pull upstream main` 拉取课程更新。
+:::
+
+### 5. 安装依赖并检查环境
+
+在仓库根目录（上一步的 `G07-icode` 文件夹）运行：
+
+```bash
+uv sync
+uv run ldsdt setup
+```
+
+- `uv sync` 下载 Python 3.12 并在仓库里建立虚拟环境 `.venv`；
+- `ldsdt setup` 在 iCode 中生成名为 `ldsdt-qwen` 的模型配置（Key 从环境变量读取，不写进任何文件），同步智能体，最后运行一次环境检查。
+
+以后随时可以单独运行环境检查：
+
+```bash
+uv run ldsdt doctor
+```
+
+全部通过时，输出类似：
+
+```text
+== 环境检查
+  [通过] Python 3.12：当前 3.12.x
+  [通过] uv
+  [通过] Git 仓库与 origin：https://github.com/<你的用户名>/G07-icode.git
+  [通过] iCode：0.x.x（至少 0.33.0）
+  [通过] 环境变量 LDSDT_QWEN_API_KEY：已设置
+  [通过] 模型配置 ldsdt-qwen：已配置
+  [通过] Qwen 接口：HTTP 200
+  [通过] 智能体同步
+  [通过] 工作流 ldsdt：PASS ldsdt (package) · 2 nodes · 1 edge
+```
+
+有 `[未通过]` 的项目时，按它后面的提示处理，或查看本页的[常见问题](#常见问题)。
+
+### 6. 配置你的辅助开发工具
+
+<Tabs>
+<TabItem label="A：AiWork">
+
+1. 安装课程发放的 AiWork 安装包，用课程发放的账号登录。
+2. 只使用顶部的「**编码**」标签页，不要用「办公」。
+3. 在「编码」页的「**项目**」中添加你的仓库文件夹（例如 `G07-aiwork`），之后**每次都在这个项目下新建任务**。不打开项目时，AiWork 会把文件写到它自己的默认目录，`ldsdt collect` 也找不到你的会话。
+4. 模型选择 **DeepSeek-Flash**。
+
+</TabItem>
+<TabItem label="B：iCode">
+
+1. 在仓库根目录启动 iCode：
+
+   ```bash
+   icode
+   ```
+
+2. 按 **F4**（或点击底部的「f4 模型」），打开「模型配置」窗口，点「新建」，按下表填写后点「保存」：
+
+   | 字段           | 填写                                                                   |
+   | -------------- | ---------------------------------------------------------------------- |
+   | 配置名称       | `ds-flash`                                                             |
+   | 模型提供商     | DeepSeek（OpenAI），API 样式选 Chat Completions                        |
+   | 模型 ID        | `deepseek-flash`                                                       |
+   | 服务地址       | `https://api.deepseek.com/`                                            |
+   | API 密钥       | `{{DEEPSEEK_API_KEY}}`（原样填写这串文字，iCode 会从环境变量读取 Key） |
+   | 最大上下文窗口 | `1000000`                                                              |
+   | 最大输出词元数 | `384000`                                                               |
+
+3. **把当前模型切换为 `ds-flash`**：在输入栏输入 `$` 选择模型，或在模型配置窗口中选中它。确认界面底部状态栏显示「模型 ds-flash」。
+
+4. 随便问一个问题（例如「这个仓库的目录结构是什么？」），确认能正常回复。
+
+:::caution
+`ldsdt-qwen` 是给你的**系统**用的，不是给你自己聊天用的。如果底部状态栏显示「模型 ldsdt-qwen」，说明你正在用小组的 Qwen Key 辅助开发，这违反课程规则，也会消耗小组的额度。
+:::
+
+</TabItem>
+</Tabs>
+
+### 7. 编写热身工作流
+
+这是本 Lab 唯一需要你「开发」的部分。请在辅助开发工具的帮助下完成，借这个机会熟悉怎样让 AI 帮你写 iCode 工作流。
+
+**任务**：修改 `.chrys/workflows/ldsdt/ldsdt.py`，让工作流读入需求文档，用一个 Qwen 智能体列出其中的全部功能需求（编号以 `FR-` 开头的条目），写成运行目录下的 `warmup/fr-list.json`：
+
+```json
+{
+  "requirement_id": "todo-cli",
+  "frs": [
+    { "id": "FR-001", "summary": "添加待办事项" },
+    { "id": "FR-002", "summary": "列出待办事项" }
+  ]
+}
+```
+
+- `requirement_id` 是需求文档开头 YAML 头部的 `id`；
+- `frs` 必须**恰好**包含需求中的全部 FR 编号，不多不少；每条的 `summary` 是一句话概括，不能为空。
+
+**固定要求**（评测工具依赖这些，不要改）：
+
+- 工作流 ID 是 `ldsdt`，即文件夹 `.chrys/workflows/ldsdt/` 的名字；
+- 文件开头的脚本元数据（`# /// script` 到 `# ///`）不要删，它让工作流使用仓库的 `.venv`；
+- 模块最后必须有 `workflow = wf.build()`；
+- 起点节点接收上面那段 JSON 输入。
+
+**怎么开始**：模版里的 `ldsdt.py` 已经有两个 Python 节点（`prepare` 解析输入、`finish` 收尾），中间的 `TODO(Lab 0)` 注释写明了要做的几件事：
+
+<Steps>
+
+1. 在 `agents/` 下写一个智能体配置，例如 `agents/warmup.yaml`。格式和课程约束见 `agents/README.md`。写好后运行 `uv run ldsdt sync`，它在 iCode 中的名称是 `ldsdt-warmup`。
+2. 在工作流中加一个智能体节点，使用这个智能体，并把它接进 `prepare` 和 `finish` 之间。
+3. 决定由谁来写 `fr-list.json`：可以让智能体用写文件工具直接写，也可以让它只回复 JSON 文本，再由后面的 Python 节点解析并写入。两种都可以。
+4. 用练习需求运行、检查、修改，直到产物正确。
+
+</Steps>
+
+几个容易踩的坑：
+
+- 智能体节点只接收上一个节点的**文字**（`text`）。Python 节点在 `data` 里放的内容不会出现在智能体的提示里，也不会自动传到智能体节点之后。怎样把运行目录这样的信息带过智能体节点，见速查表的「在节点之间传递数据」。
+- 改了 `agents/` 下的文件后，要运行 `uv run ldsdt sync` 才会生效。评测前会自动同步一次。
+- 检查工作流能否加载：`uv run ldsdt doctor` 的最后一项，或者 `icode workflow validate .chrys/workflows/ldsdt/ldsdt.py`。
+
+**调试**：用练习需求运行一次，并按 Lab 0 的评分项检查：
+
+```bash
+uv run ldsdt try tasks/practice/todo-cli.md --lab 0
+```
+
+产物在 `runs/try/todo-cli/` 下（这个目录不会被提交），`result.json` 记录了检查结果，加 `-v` 可以在终端显示具体问题。想看智能体每一步做了什么，可以启动 `icode`，按 **F1** 打开会话列表，找到这次运行的工作流会话，逐个节点查看输入与输出。
+
+:::note[Windows 用户]
+不要直接用 `icode workflow run ... --input '{...}'` 手动运行：PowerShell 会改掉引号里的内容，工作流会收到不合法的 JSON。请用上面的 `uv run ldsdt try`，它会替你拼好输入。
+:::
+
+### 8. 评测、收集与提交
+
+产物正确后，按顺序运行下面三条命令。
+
+<Steps>
+
+1. **收集会话记录**。`ldsdt collect` 把你这一周在本仓库里使用 iCode 或 AiWork 的会话打包到 `.ldsdt/collect/`，供课程研究使用（研究说明见[课程信息](../../course/information/#关于课程研究)）。第一次运行时会要求输入课程发给你的研究编号。
+
+   ```bash
+   uv run ldsdt collect --week 1
+   ```
+
+   它会列出找到的会话，你可以排除与课程无关的会话。打包出的压缩包**不要提交到仓库**，提交方式见 [C 角色指南](../../course/role-c/)。Lab 0 只要求 `collect` 至少收集到一个你自己的会话。
+
+2. **评测**。在两份练习需求 `todo-cli` 和 `wordstat` 上运行你的系统并打分，约需几分钟：
+
+   ```bash
+   uv run ldsdt grade lab0
+   ```
+
+   产物写在 `runs/lab0/` 下，结果写在 `runs/lab0/grade.json`。加 `-v` 可以显示每一项的问题。
+
+3. **提交**。门槛通过后运行：
+
+   ```bash
+   uv run ldsdt submit lab0
+   ```
+
+   它会检查有没有误提交的 Key，然后提交全部改动（包括 `runs/lab0/`），打上标签 `lab0-submit` 并推送到你的仓库。截止前可以重复评测和提交，以最后一次为准。
+
+</Steps>
+
+### 9. C 的任务
+
+C 在本 Lab 不写代码，需要完成：
+
+- 安装 iCode（第 2 步），并分别试用一次 iCode 和 AiWork，了解 A、B 各自的工作界面；
+- 参加第 1 周课上的观察培训：观看示例录像，并独立填写一次观察记录；
+- 填写背景问卷（第 1 周课上发放）；
+- 和 A、B 一起，在他们的仓库上运行一次 `uv run ldsdt collect --week 1`，并检查打包出的会话列表是否完整；
+- 阅读 [C 角色指南](../../course/role-c/)，从第 2 周起按规范记录。
+
+## 评分
+
+**门槛**：工作流能加载（`doctor` 中「工作流 ldsdt」一项通过），并且在两份计分需求上都启动了运行。不满足门槛时评测分为 0，`submit` 也会拒绝提交。
+
+| 评分项              | 分值 | 说明                                                              |
+| ------------------- | ---- | ----------------------------------------------------------------- |
+| 环境检查            | 30   | `ldsdt doctor` 全部通过                                           |
+| 工作流运行完成      | 20   | 在两份练习需求上都正常结束（每份限时 10 分钟），取平均            |
+| `fr-list.json` 正确 | 40   | FR 编号集合与需求一致的程度 × 有非空 `summary` 的比例，两份取平均 |
+| 会话收集            | 10   | `ldsdt collect` 至少收集到一个本仓库中的会话                      |
+
+- 满分 100，折算为本 Lab 评测分的 6 分；A、B 两个仓库取平均，小组共享。
+- 运行超时或出错不会直接判 0，评测工具会照常检查已经生成的产物。
+- 本 Lab 没有设计选择，`design-choices.yaml` 不用填。
+- 验收问答（4 分）在 11 月 20 日课上进行：助教会请 A、B 各自讲解自己的工作流是怎样写出 `fr-list.json` 的，并请 C 说一说观察到的 A、B 工作方式的不同。
+
+## 常见问题
+
+### 设置了环境变量，但检查时仍显示「未设置」
+
+环境变量只在**新打开**的终端里生效。关掉所有终端窗口（包括编辑器里内嵌的终端）再开一个新的。macOS 上还要确认你改的是 `~/.zshrc`，并且保存了文件。
+
+### 提示找不到 `icode` 命令
+
+运行 `uv tool update-shell`，然后重新打开终端。
+
+### `doctor` 中「Qwen 接口」未通过
+
+- `HTTP 401`：Key 不对，检查 `LDSDT_QWEN_API_KEY` 是否完整、有没有多余的空格或引号；
+- `HTTP 404`：地址不对，检查 `LDSDT_QWEN_BASE_URL` 是否与课程发放的完全一致；
+- `HTTP 429`：被限流，稍等片刻再试；
+- `无法连接`：检查网络。
+
+改了环境变量后，要重新打开终端，再运行一次 `uv run ldsdt setup`。
+
+### `ldsdt setup` 提示已有另一份名为 `ldsdt-qwen` 的模型配置
+
+你之前手动建过同名配置。在 iCode 的模型配置窗口（F4）中删除它，或者运行 `uv run ldsdt setup --replace`，后者会把旧配置改名备份。
+
+### 推送时提示输入密码或认证失败
+
+GitHub 不再接受账号密码推送。macOS 上最简单的做法是安装 [GitHub CLI](https://cli.github.com/) 后运行 `gh auth login`，按提示用浏览器登录；也可以[配置 SSH 密钥](https://docs.github.com/zh/authentication/connecting-to-github-with-ssh)，并把 `origin` 改成 `git@github.com:<你的用户名>/<仓库名>.git`。Windows 上安装 Git 时自带的凭据管理器会弹出浏览器登录。
+
+### `ldsdt try` 运行完成，但 `fr_list` 是 0 分
+
+查看 `runs/try/<需求 id>/result.json` 里的问题说明，或加 `-v` 重新运行。常见原因：文件没写到 `<run_dir>/warmup/fr-list.json`（例如写到了仓库根目录），JSON 格式不合法，或者 FR 编号多了或少了。
+
+### 智能体节点说找不到运行目录，或把文件写到了别处
+
+智能体只能看到上一个节点的 `text`。请在交给它的文字里写清楚运行目录和输出文件的**绝对路径**。
+
+### 下载很慢或失败
+
+可以先给 uv 设置国内镜像再重试。macOS：`export UV_DEFAULT_INDEX="https://mirrors.zju.edu.cn/pypi/web/simple"`；Windows：`$env:UV_DEFAULT_INDEX = "https://mirrors.zju.edu.cn/pypi/web/simple"`。这个设置只在当前终端窗口有效。
+
+其他问题请先查看[常见问题](../../course/faq/)页，仍未解决的在课程群中提问，并附上 `uv run ldsdt doctor` 的完整输出（输出中不含 Key）。

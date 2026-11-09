@@ -7,7 +7,7 @@ export const collections = {
     // Publish all course and laboratory documents.
     loader: glob({
       base: './src/content/docs',
-      pattern: ['course/*.md', 'labs/lab-*.md'],
+      pattern: ['course/*.{md,mdx}', 'labs/*.{md,mdx}'],
     }),
     schema: docsSchema(),
   }),
