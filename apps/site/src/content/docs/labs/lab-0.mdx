@@ -373,13 +373,15 @@ uv run ldsdt try tasks/practice/todo-cli.md --lab 0
 
 <Steps>
 
-1. **收集会话记录**。`ldsdt collect` 把你这一周在本仓库里使用 iCode 或 AiWork 的会话打包到 `.ldsdt/collect/`，课程组用它了解大家使用 AI 工具的情况。第一次运行时会要求输入课程发给你的个人编号。
+1. **收集会话记录**。`ldsdt collect` 把你在本仓库里使用 iCode 或 AiWork 的会话打包到 `.ldsdt/collect/`，课程组用它了解大家使用 AI 工具的情况。第一次运行时会要求输入课程发给你的个人编号。
 
    ```bash
    uv run ldsdt collect --week 1
    ```
 
-   它会列出找到的会话，你可以排除与课程无关的会话。打包出的压缩包**不要提交到仓库**，提交方式见 [C 角色指南](../../course/role-c/)。Lab 0 只要求 `collect` 至少收集到一个你自己的会话。
+   它会列出找到的会话，你可以排除与课程无关的会话。打包出的 `.ldsdt/collect/week-1-<个人编号>.zip` **不要提交到仓库**，而是上传到学在浙大的「会话记录 1」作业，截止时间与 Lab 0 相同（11 月 26 日 23:59）。之后每次提交仓库时都要这样上传一次，见[评测与提交](../../course/grading/#会话记录)。
+
+   Lab 0 的「会话收集」一项只要求 `collect` 至少收集到一个你自己的会话。
 
 2. **评测**。在两份练习需求 `todo-cli` 和 `wordstat` 上运行你的系统并打分，约需几分钟：
 
