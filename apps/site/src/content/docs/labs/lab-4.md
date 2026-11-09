@@ -1,6 +1,6 @@
 ---
-title: Lab 4 - 测试与修复迭代（A4）
-description: 构建 A4：生成测试、运行、定位失败并驱动修复迭代。
+title: Lab 4 - 测试与修复迭代
+description: 构建测试模块：生成测试、运行、定位失败并驱动修复迭代。
 ---
 
 :::note

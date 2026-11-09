@@ -1,6 +1,6 @@
 ---
-title: Lab 3 - 实现与集成（A3）
-description: 构建 A3：按设计生成可以安装、运行的目标仓库。
+title: Lab 3 - 实现与集成
+description: 构建实现模块：按设计生成可以安装、运行的目标仓库。
 ---
 
 :::note
