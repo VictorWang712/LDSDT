@@ -26,7 +26,7 @@ C 不写系统代码。你的工作是记录 A、B 开发系统的过程，收�
 
 - CSV 文件用 **UTF-8** 编码。Excel 默认可能另存为其他编码，建议用 VS Code 等文本编辑器，或在 Excel 中选择「CSV UTF-8」格式保存。
 - 时间统一写成 `YYYY-MM-DD HH:MM`（本地时间，精确到分钟）。课程组要靠时间把你的观察和工具日志对上，请尽量准确。
-- 工作片段编号写成 `<组号>-E<三位序号>`，例如 `G07-E031`；关键事件报告编号写成 `INC-001`、`INC-002`……
+- 工作片段编号写成 `<组号>-E<三位序号>`，例如 `G98-E031`；关键事件报告编号写成 `INC-001`、`INC-002`……
 
 ## 观察日志 `observation_log.csv`
 
@@ -34,12 +34,12 @@ C 不写系统代码。你的工作是记录 A、B 开发系统的过程，收�
 
 ```csv
 episode_id,who,tool,subtask,start,end,goal,delegation,verification,interventions,outcome,problems,recovery,frustration,quote
-G07-E031,B,iCode,3,2026-12-04 14:40,2026-12-04 15:05,"让设计模块的输出通过 manifest 检查",stepwise,"run;grade","reprompt=3;manual_edit=1",success,"P1;P6","手工补了 schema 示例再让 AI 改",3,"它每次都忘了 trace 字段"
+G98-E031,B,iCode,3,2026-12-04 14:40,2026-12-04 15:05,"让设计模块的输出通过 manifest 检查",stepwise,"run;grade","reprompt=3;manual_edit=1",success,"P1;P6","手工补了 schema 示例再让 AI 改",3,"它每次都忘了 trace 字段"
 ```
 
 | 字段            | 填写                                                                                                                                                                                                |
 | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `episode_id`    | 片段编号，如 `G07-E031`                                                                                                                                                                             |
+| `episode_id`    | 片段编号，如 `G98-E031`                                                                                                                                                                             |
 | `who`           | `A` 或 `B`                                                                                                                                                                                          |
 | `tool`          | `AiWork` 或 `iCode`                                                                                                                                                                                 |
 | `subtask`       | Lab 编号，0–4；期末写 `final`                                                                                                                                                                       |
@@ -121,7 +121,7 @@ time,subtask,dimension,choice,alternatives,proposed_by,from_ai
 3. 两人与 AI 交互方式最大的不同；
 4. A、B 交流的摘要。
 
-**每个论点都要注明依据的片段编号**，例如「B 更倾向于先让 AI 做计划（G07-E012、G07-E019）」。不需要判断哪个工具更好。
+**每个论点都要注明依据的片段编号**，例如「B 更倾向于先让 AI 做计划（G98-E012、G98-E019）」。不需要判断哪个工具更好。
 
 ## 每周的会话收集
 

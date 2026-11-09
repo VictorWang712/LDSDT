@@ -12,3 +12,19 @@
 :root[data-theme='dark'] .site-title img {
   filter: invert(1);
 }
+
+/* 宽屏时收窄右侧目录栏，把空间留给正文 */
+@media (min-width: 72rem) {
+  :root {
+    --ldsdt-toc-width: 15rem;
+    --sl-content-width: 54rem;
+  }
+
+  .right-sidebar-container {
+    width: var(--ldsdt-toc-width);
+  }
+
+  [data-has-sidebar][data-has-toc] .main-pane {
+    width: calc(100% - var(--ldsdt-toc-width));
+  }
+}
