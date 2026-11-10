@@ -10,7 +10,7 @@ description: 安装、运行与调试、评测与提交、会话记录、模型�
 安装和环境配置的问题集中在 [Lab 0 的常见问题](../../labs/lab-0/#常见问题)，包括：
 
 - [设置了环境变量，但检查时仍显示「未设置」](../../labs/lab-0/#设置了环境变量但检查时仍显示未设置)
-- [提示找不到 `icode` 命令](../../labs/lab-0/#提示找不到-icode-命令)
+- [提示找不到 `icode-zju` 命令](../../labs/lab-0/#提示找不到-icode-zju-命令)
 - [`doctor` 中「Qwen 接口」未通过](../../labs/lab-0/#doctor-中qwen-接口未通过)
 - [`ldsdt setup` 提示已有另一份名为 `ldsdt-qwen` 的模型配置](../../labs/lab-0/#ldsdt-setup-提示已有另一份名为-ldsdt-qwen-的模型配置)
 - [推送时提示输入密码或认证失败](../../labs/lab-0/#推送时提示输入密码或认证失败)
@@ -20,7 +20,7 @@ description: 安装、运行与调试、评测与提交、会话记录、模型�
 
 ### 怎样查看智能体每一步做了什么
 
-在仓库根目录启动 `icode`，按 **F1** 打开会话列表，找到对应的工作流会话（`ldsdt try` 和 `ldsdt grade` 的每次运行都是一个会话），就能逐个节点查看输入、输出和智能体的完整对话。
+在仓库根目录启动 `icode-zju`，按 **F1** 打开会话列表，找到对应的工作流会话（`ldsdt try` 和 `ldsdt grade` 的每次运行都是一个会话），就能逐个节点查看输入、输出和智能体的完整对话。
 
 也可以直接看文件：每次运行的 `run.json` 里有 `session_id` 和 `run_id`，节点的对话保存在 iCode 配置目录下（macOS 为 `~/.chrys`，Windows 为 `%APPDATA%\chrys`）的 `sessions/<会话目录>/workflows/<run_id>/nodes/` 中。会话目录名是 `session_id` 去掉连字符后的前 12 位。
 
@@ -41,7 +41,7 @@ description: 安装、运行与调试、评测与提交、会话记录、模型�
 说明 iCode 无法加载你的工作流。运行下面的命令查看具体错误：
 
 ```bash
-icode workflow validate .chrys/workflows/ldsdt/ldsdt.py
+icode-zju workflow validate .chrys/workflows/ldsdt/ldsdt.py
 ```
 
 常见原因：Python 语法错误；模块末尾缺少 `workflow = wf.build()`；删掉了文件开头的脚本元数据；连线成环（要重复执行请用 `wf.loop`）；节点名重复。
@@ -56,7 +56,7 @@ icode workflow validate .chrys/workflows/ldsdt/ldsdt.py
 
 ### 改了 `agents/` 下的配置，运行时没有生效
 
-iCode 不读取仓库里的智能体配置，要运行 `uv run ldsdt sync` 把它们复制到 iCode 的配置目录。`ldsdt try` 和 `ldsdt grade` 运行前会自动同步一次；只有直接用 `icode` 命令运行时，才需要手动同步。
+iCode 不读取仓库里的智能体配置，要运行 `uv run ldsdt sync` 把它们复制到 iCode 的配置目录。`ldsdt try` 和 `ldsdt grade` 运行前会自动同步一次；只有直接用 `icode-zju` 命令运行时，才需要手动同步。
 
 ### 智能体的命令被拦下：`command blocked — ... not in whitelist`
 
@@ -64,7 +64,7 @@ iCode 不读取仓库里的智能体配置，要运行 `uv run ldsdt sync` 把�
 
 ### Windows 上手动运行工作流，提示输入不是合法的 JSON
 
-PowerShell 会改掉引号里的内容。不要直接用 `icode workflow run ... --input '{...}'`，请改用：
+PowerShell 会改掉引号里的内容。不要直接用 `icode-zju workflow run ... --input '{...}'`，请改用：
 
 ```bash
 uv run ldsdt try <需求文档> --lab N

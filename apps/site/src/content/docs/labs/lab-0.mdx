@@ -134,25 +134,25 @@ uv --version
 </TabItem>
 </Tabs>
 
-### 2. 安装 iCode
+### 2. 安装 iCode（课程特供版）
 
-A、B、C 都需要安装 iCode：B 用它辅助开发，所有人的系统都运行在它上面。
+A、B、C 都需要安装 iCode：B 用它辅助开发，所有人的系统都运行在它上面。课程统一使用**浙江大学课程特供版 iCode**，命令名是 `icode-zju`：
 
 ```bash
-uv tool install iCode-TUI
+uv tool install --python 3.14 --index-url https://1.92.199.78/pypi/simple icode-zju
 uv tool update-shell
 ```
 
 **重新打开终端**，检查：
 
 ```bash
-icode --version
+icode-zju --version
 ```
 
-应输出 `0.33.0` 或更高的版本号。
+应输出 `0.35.2+zju.6` 或更高的版本号（带 `+zju` 后缀）。下文提到 iCode 的命令一律写作 `icode-zju`。
 
-:::note[iCode 课程版]
-课程将提供一个浙江大学课程定制版的 iCode。发布后本节的安装命令会更新，届时请按新命令重新安装。
+:::caution[之前装过普通版 iCode]
+如果你之前用 `uv tool install iCode-TUI` 装过普通版，请先卸载：`uv tool uninstall icode-tui`。两个版本共用同一个配置目录，已有的模型配置、会话都会保留。评测工具只认 `icode-zju`。
 :::
 
 ### 3. 设置环境变量
@@ -263,7 +263,7 @@ uv run ldsdt doctor
   [通过] Python 3.12：当前 3.12.x
   [通过] uv
   [通过] Git 仓库与 origin：https://github.com/<你的用户名>/G98-icode.git
-  [通过] iCode：0.x.x（至少 0.33.0）
+  [通过] iCode（课程特供版）：0.35.2+zju.6（至少 0.35.2+zju）
   [通过] 环境变量 LDSDT_QWEN_API_KEY：已设置
   [通过] 模型配置 ldsdt-qwen：已配置
   [通过] Qwen 接口：HTTP 200
@@ -289,8 +289,10 @@ uv run ldsdt doctor
 1. 在仓库根目录启动 iCode：
 
    ```bash
-   icode
+   icode-zju
    ```
+
+   第一次启动时会弹出「数据收集授权」窗口，说明特供版希望收集你的 iCode 会话（提示词与模型回复、工具调用记录、错误日志），用于改进课程设计和相关研究。是否同意由你自己决定：拒绝不影响 iCode 的使用，也不影响成绩。之后可以随时用 `icode-zju-agent consent --grant`（同意）或 `icode-zju-agent consent --decline`（拒绝）修改。
 
 2. 按 **F4**（或点击底部的「f4 模型」），打开「模型配置」窗口，点「新建」，按下表填写后点「保存」：
 
@@ -304,7 +306,7 @@ uv run ldsdt doctor
    | 最大上下文窗口 | `1000000`                                                              |
    | 最大输出词元数 | `384000`                                                               |
 
-3. **把当前模型切换为 `ds-flash`**：在输入栏输入 `$` 选择模型，或在模型配置窗口中选中它。确认界面底部状态栏显示「模型 ds-flash」。
+3. **把当前模型切换为 `ds-flash`**：在输入栏输入 `$` 选择模型，或在模型配置窗口中选中它。确认界面底部状态栏显示「模型 ds-flash」。模型列表里特供版预置的「ZJU Gateway」暂时不要使用。
 
 4. 随便问一个问题（例如「这个仓库的目录结构是什么？」），确认能正常回复。
 
@@ -356,7 +358,7 @@ uv run ldsdt doctor
 
 - 智能体节点只接收上一个节点的**文字**（`text`）。Python 节点在 `data` 里放的内容不会出现在智能体的提示里，也不会自动传到智能体节点之后。怎样把运行目录这样的信息带过智能体节点，见速查表的「在节点之间传递数据」。
 - 改了 `agents/` 下的文件后，要运行 `uv run ldsdt sync` 才会生效。评测前会自动同步一次。
-- 检查工作流能否加载：`uv run ldsdt doctor` 的最后一项，或者 `icode workflow validate .chrys/workflows/ldsdt/ldsdt.py`。
+- 检查工作流能否加载：`uv run ldsdt doctor` 的最后一项，或者 `icode-zju workflow validate .chrys/workflows/ldsdt/ldsdt.py`。
 
 **调试**：用练习需求运行一次，并按 Lab 0 的评分项检查：
 
@@ -364,10 +366,10 @@ uv run ldsdt doctor
 uv run ldsdt try tasks/practice/todo-cli.md --lab 0
 ```
 
-产物在 `runs/try/todo-cli/` 下（这个目录不会被提交），`result.json` 记录了检查结果，加 `-v` 可以在终端显示具体问题。想看智能体每一步做了什么，可以启动 `icode`，按 **F1** 打开会话列表，找到这次运行的工作流会话，逐个节点查看输入与输出。
+产物在 `runs/try/todo-cli/` 下（这个目录不会被提交），`result.json` 记录了检查结果，加 `-v` 可以在终端显示具体问题。想看智能体每一步做了什么，可以启动 `icode-zju`，按 **F1** 打开会话列表，找到这次运行的工作流会话，逐个节点查看输入与输出。
 
 :::note[Windows 用户]
-不要直接用 `icode workflow run ... --input '{...}'` 手动运行：PowerShell 会改掉引号里的内容，工作流会收到不合法的 JSON。请用上面的 `uv run ldsdt try`，它会替你拼好输入。
+不要直接用 `icode-zju workflow run ... --input '{...}'` 手动运行：PowerShell 会改掉引号里的内容，工作流会收到不合法的 JSON。请用上面的 `uv run ldsdt try`，它会替你拼好输入。
 :::
 
 ### 8. 评测、收集与提交
@@ -435,9 +437,9 @@ C 在本 Lab 不写代码，需要完成：
 
 环境变量只在**新打开**的终端里生效。关掉所有终端窗口（包括编辑器里内嵌的终端）再开一个新的。macOS 上还要确认你改的是 `~/.zshrc`，并且保存了文件。
 
-### 提示找不到 `icode` 命令
+### 提示找不到 `icode-zju` 命令
 
-运行 `uv tool update-shell`，然后重新打开终端。
+运行 `uv tool update-shell`，然后重新打开终端。如果仍然找不到，运行 `uv tool list` 确认列表中有 `icode-zju`；没有就按[第 2 步](#2-安装-icode课程特供版)重新安装。注意命令是 `icode-zju`，不是 `icode`。
 
 ### `doctor` 中「Qwen 接口」未通过
 
