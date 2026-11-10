@@ -74,7 +74,7 @@ uv run ldsdt try <需求文档> --lab N
 
 ### 模型服务报错或被限流（HTTP 429、连接超时）
 
-A、B 共用小组的 Qwen Key，同时运行时更容易被限流。稍等片刻再试，并尽量错开两人的评测时间。如果是模型服务故障导致没能按时提交，保留 `.ldsdt/grade-history.jsonl` 和 `run.json` 中的报错，联系助教申请免责。
+网关对每个 Key 有调用频率和额度限制，连续运行多次时可能被限流。稍等片刻再试。如果是模型服务故障导致没能按时提交，保留 `.ldsdt/grade-history.jsonl` 和 `run.json` 中的报错，联系助教申请免责。
 
 ## 评测与提交
 
@@ -124,7 +124,7 @@ uv run ldsdt collect --week N --pseudonym <正确的编号>
 
 ## 模型与 Key
 
-### 不小心用小组的 Qwen Key 和辅助工具聊了天
+### 不小心用 `ldsdt-qwen` 和辅助工具聊了天
 
 检查 iCode 底部状态栏显示的模型：如果是 `ldsdt-qwen`，按 [Lab 0 第 6 步](../../labs/lab-0/#6-配置你的辅助开发工具)把当前模型切换为「ZJU Gateway」。之前的情况如实告诉本组的 C，记在记录里即可，如实报告的违规不扣分。
 
