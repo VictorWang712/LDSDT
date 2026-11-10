@@ -64,7 +64,7 @@ import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
   - 组号（例如 `G98`）；
   - 小组的 Qwen API Key 和百炼接口地址（A、B 共用）；
   - B：个人的 DS-4.1-flash API Key；
-  - A：AiWork 的安装包与账号。
+  - A：AiWork 的账号（安装包从 AiWork 官网下载，见第 6 步）。
   - 个人编号（第 8 步 `ldsdt collect` 用）。
 - **网络**：安装过程需要访问 GitHub 和 Python 软件源。校园网下一般没有问题。
 
@@ -275,7 +275,7 @@ uv run ldsdt doctor
 <Tabs>
 <TabItem label="A：AiWork">
 
-1. 安装课程发放的 AiWork 安装包，用课程发放的账号登录。
+1. 打开 AiWork 官网 [aiwork.dtagi.cn](https://aiwork.dtagi.cn/home)，下载与你的系统（macOS 或 Windows）对应的安装包并安装，然后用课程发放的账号登录。请只从这个地址下载。
 2. 只使用顶部的「**编码**」标签页，不要用「办公」。
 3. 在「编码」页的「**项目**」中添加你的仓库文件夹（例如 `G98-aiwork`），之后**每次都在这个项目下新建任务**。不打开项目时，AiWork 会把文件写到它自己的默认目录，`ldsdt collect` 也找不到你的会话。
 4. 模型选择 **DeepSeek-Flash**。
@@ -405,7 +405,7 @@ uv run ldsdt try tasks/practice/todo-cli.md --lab 0
 
 C 在本 Lab 不写代码，需要完成：
 
-- 安装 iCode（第 2 步），并分别试用一次 iCode 和 AiWork，了解 A、B 各自的工作界面；
+- 安装 iCode（第 2 步）和 AiWork（从 [AiWork 官网](https://aiwork.dtagi.cn/home)下载），分别试用一次，了解 A、B 各自的工作界面；
 - 阅读 [C 角色指南](../../course/role-c/)，特别是其中的「记录示例」，并在第 1 周课上 A、B 配置环境时，试着记录一两个工作片段；
 - 和 A、B 一起，在他们的仓库上运行一次 `uv run ldsdt collect --week 1`，并检查打包出的会话列表是否完整；
 - 从第 2 周起按 C 角色指南的规范记录。
