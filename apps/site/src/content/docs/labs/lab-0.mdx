@@ -65,7 +65,7 @@ import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
   - 个人编号，即「组号-角色」，例如 `G98-A`，第 8 步 `ldsdt collect` 时要输入。
 - **A：注册 AiWork 账号**：在 [AiWork 官网](https://aiwork.dtagi.cn/home)用**本人手机号**注册，并在 **11 月 13 日 14:00 前**把注册所用的手机号填进钉钉群的共享表格「LDSDT AiWork 账号」。课程会统一为这些账号发放 credits。
 - **课程发放的信息**（第 1 周课上分发）：
-  - A、B 每人一个**课程网关 Key**。这个 Key 可以调用 Qwen3.8-27B 和 DS-4.1-flash 两个模型：A 用它运行自己系统里的 Qwen；B 用它运行自己系统里的 Qwen，同时也用它辅助开发。
+  - A、B、C 每人一个**课程网关 Key**。这个 Key 可以调用 Qwen3.8-27B 和 DS-4.1-flash 两个模型：A 用它运行自己系统里的 Qwen；B 用它运行自己系统里的 Qwen，同时也用它辅助开发；C 可以用它调用 DS-4.1-flash 辅助整理记录。
 
   Key 通过浙大课程网关 `https://1.92.199.78/v1` 调用模型，网关地址和必需的请求头已经写在评测工具和 iCode 特供版的预置配置里，你只需要设置 Key。
 
@@ -159,7 +159,7 @@ icode-zju --version
 
 ### 3. 设置环境变量
 
-把课程发给你的 Key 存成环境变量 `LDSDT_API_KEY`（A、B 都需要；变量名必须完全一致）。
+把课程发给你的 Key 存成环境变量 `LDSDT_API_KEY`（A、B、C 都需要；变量名必须完全一致）。
 
 <Tabs syncKey="os">
 <TabItem label="macOS">
@@ -401,6 +401,7 @@ uv run ldsdt try tasks/practice/todo-cli.md --lab 0
 C 在本 Lab 不写代码，需要完成：
 
 - 安装 iCode（第 2 步）和 AiWork（从 [AiWork 官网](https://aiwork.dtagi.cn/home)下载），分别试用一次，了解 A、B 各自的工作界面；
+- 设置环境变量 `LDSDT_API_KEY`（第 3 步），并照[第 6 步](#6-配置你的辅助开发工具)中 B 的做法，把 iCode 的「ZJU Gateway」配置的 API 密钥改为 `{{LDSDT_API_KEY}}`。之后可以在 iCode 中用 DS-4.1-flash 辅助整理记录、撰写报告，但不能替 A、B 写代码；
 - 阅读 [C 角色指南](../../course/role-c/)，特别是其中的「记录示例」，并在第 1 周课上 A、B 配置环境时，试着记录一两个工作片段；
 - 和 A、B 一起，在他们的仓库上运行一次 `uv run ldsdt collect --week 1`，并检查打包出的会话列表是否完整；
 - 从第 2 周起按 C 角色指南的规范记录。
