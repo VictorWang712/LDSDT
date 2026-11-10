@@ -60,12 +60,13 @@ import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
 
 - **一台电脑**：macOS（Apple 芯片或 Intel 均可），或 64 位 x86 处理器的 Windows 10/11。暂不支持 ARM 处理器的 Windows。
 - **一个 GitHub 账号**，并确认能在这台电脑上推送代码。
+- **分组与角色**（11 月 12 日第一节正课当天完成）：在钉钉群的共享表格「LDSDT 分组与角色」中登记，得到：
+  - 组号，例如 `G98`（`G98` 只是示例，实际不存在这个组）；
+  - 个人编号，即「组号-角色」，例如 `G98-A`，第 8 步 `ldsdt collect` 时要输入。
+- **A：注册 AiWork 账号**：在 [AiWork 官网](https://aiwork.dtagi.cn/home)用**本人手机号**注册，并在 **11 月 13 日 14:00 前**把注册所用的手机号填进钉钉群的共享表格「LDSDT AiWork 账号」。课程会统一为这些账号开通 credits。
 - **课程发放的信息**（第 1 周课上分发）：
-  - 组号（例如 `G98`）；
   - 小组的 Qwen API Key 和百炼接口地址（A、B 共用）；
-  - B：个人的 DS-4.1-flash API Key；
-  - A：AiWork 的账号（安装包从 AiWork 官网下载，见第 6 步）。
-  - 个人编号（第 8 步 `ldsdt collect` 用）。
+  - B：个人的 DS-4.1-flash API Key。
 - **网络**：安装过程需要访问 GitHub 和 Python 软件源。校园网下一般没有问题。
 
 :::caution[保护好 Key]
@@ -229,6 +230,8 @@ for v in LDSDT_QWEN_API_KEY LDSDT_QWEN_BASE_URL DEEPSEEK_API_KEY; do [ -n "${(P)
 
 3. 在 GitHub 仓库页面打开「Settings」→「Collaborators」→「Add people」，添加助教的账号 `VictorWang712`。官方复评需要读取你的仓库。
 
+4. 把仓库地址（例如 `https://github.com/<你的用户名>/G98-icode`）填进「LDSDT 分组与角色」表格中你自己的那一行。
+
 </Steps>
 
 :::caution
@@ -275,7 +278,7 @@ uv run ldsdt doctor
 <Tabs>
 <TabItem label="A：AiWork">
 
-1. 打开 AiWork 官网 [aiwork.dtagi.cn](https://aiwork.dtagi.cn/home)，下载与你的系统（macOS 或 Windows）对应的安装包并安装，然后用课程发放的账号登录。请只从这个地址下载。
+1. 打开 AiWork 官网 [aiwork.dtagi.cn](https://aiwork.dtagi.cn/home)，下载与你的系统（macOS 或 Windows）对应的安装包并安装，然后用你注册的账号（本人手机号）登录。请只从这个地址下载。
 2. 只使用顶部的「**编码**」标签页，不要用「办公」。
 3. 在「编码」页的「**项目**」中添加你的仓库文件夹（例如 `G98-aiwork`），之后**每次都在这个项目下新建任务**。不打开项目时，AiWork 会把文件写到它自己的默认目录，`ldsdt collect` 也找不到你的会话。
 4. 模型选择 **DeepSeek-Flash**。
@@ -373,7 +376,7 @@ uv run ldsdt try tasks/practice/todo-cli.md --lab 0
 
 <Steps>
 
-1. **收集会话记录**。`ldsdt collect` 把你在本仓库里使用 iCode 或 AiWork 的会话打包到 `.ldsdt/collect/`，课程组用它了解大家使用 AI 工具的情况。第一次运行时会要求输入课程发给你的个人编号。
+1. **收集会话记录**。`ldsdt collect` 把你在本仓库里使用 iCode 或 AiWork 的会话打包到 `.ldsdt/collect/`，课程组用它了解大家使用 AI 工具的情况。第一次运行时会要求输入你的个人编号（「组号-角色」，例如 `G98-A`，见「LDSDT 分组与角色」表格）。
 
    ```bash
    uv run ldsdt collect --week 1
