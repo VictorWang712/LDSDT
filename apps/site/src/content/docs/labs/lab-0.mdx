@@ -49,10 +49,10 @@ import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
 
 ### 两种模型，不要混用
 
-|              | 用途                                 | 用什么                                                          |
-| ------------ | ------------------------------------ | --------------------------------------------------------------- |
-| 辅助开发模型 | 帮**你**写工作流、智能体配置和提示词 | A：AiWork 自带的 DeepSeek-Flash；B：iCode 中配置的 DS-4.1-flash |
-| 系统内部模型 | 在**你的系统**里运行的智能体         | 只用 Qwen3.8-27B（模型配置 `ldsdt-qwen`，小组 Key）             |
+|              | 用途                                 | 用什么                                                                                 |
+| ------------ | ------------------------------------ | -------------------------------------------------------------------------------------- |
+| 辅助开发模型 | 帮**你**写工作流、智能体配置和提示词 | A：AiWork 自带的 DeepSeek-Flash；B：iCode 中的 DS-4.1-flash（模型配置「ZJU Gateway」） |
+| 系统内部模型 | 在**你的系统**里运行的智能体         | 只用 Qwen3.8-27B（模型配置 `ldsdt-qwen`，小组 Key）                                    |
 
 `ldsdt sync` 会自动把 `agents/` 下的智能体绑定到 `ldsdt-qwen`，你不用管。需要注意的是**你自己和辅助工具聊天时用的模型**，见第 6 步。
 
@@ -65,8 +65,11 @@ import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
   - 个人编号，即「组号-角色」，例如 `G98-A`，第 8 步 `ldsdt collect` 时要输入。
 - **A：注册 AiWork 账号**：在 [AiWork 官网](https://aiwork.dtagi.cn/home)用**本人手机号**注册，并在 **11 月 13 日 14:00 前**把注册所用的手机号填进钉钉群的共享表格「LDSDT AiWork 账号」。课程会统一为这些账号发放 credits。
 - **课程发放的信息**（第 1 周课上分发）：
-  - 小组的 Qwen API Key 和百炼接口地址（A、B 共用）；
-  - B：个人的 DS-4.1-flash API Key。
+  - 小组的课程网关 Key（A、B 共用，供系统内部的 Qwen 使用）；
+  - B：个人的课程网关 Key（供辅助开发的 DS-4.1-flash 使用）。
+
+  两种 Key 都通过浙大课程网关 `https://1.92.199.78/v1` 调用模型，网关地址和必需的请求头已经写在评测工具和 iCode 特供版的预置配置里，你只需要设置 Key。
+
 - **网络**：安装过程需要访问 GitHub 和 Python 软件源。校园网下一般没有问题。
 
 :::caution[保护好 Key]
@@ -159,11 +162,10 @@ icode-zju --version
 
 把课程发的信息存成环境变量。变量名必须和下面完全一致：
 
-| 变量名                | 值                                       | 谁需要 |
-| --------------------- | ---------------------------------------- | ------ |
-| `LDSDT_QWEN_API_KEY`  | 小组的 Qwen API Key                      | A、B   |
-| `LDSDT_QWEN_BASE_URL` | 小组的百炼接口地址（以 `https://` 开头） | A、B   |
-| `DEEPSEEK_API_KEY`    | 个人的 DS-4.1-flash API Key              | B      |
+| 变量名               | 值                 | 谁需要 |
+| -------------------- | ------------------ | ------ |
+| `LDSDT_QWEN_API_KEY` | 小组的课程网关 Key | A、B   |
+| `DEEPSEEK_API_KEY`   | 个人的课程网关 Key | B      |
 
 <Tabs syncKey="os">
 <TabItem label="macOS">
@@ -177,28 +179,27 @@ touch ~/.zshrc && open -e ~/.zshrc
 在文件末尾加上下面几行，把引号里的内容换成你自己的值，保存并关闭：
 
 ```bash
-export LDSDT_QWEN_API_KEY="小组的 Qwen Key"
-export LDSDT_QWEN_BASE_URL="小组的百炼接口地址"
-export DEEPSEEK_API_KEY="你的 DS-4.1-flash Key"   # 只有 B 需要
+export LDSDT_QWEN_API_KEY="小组的课程网关 Key"
+export DEEPSEEK_API_KEY="你个人的课程网关 Key"   # 只有 B 需要
 ```
 
 **重新打开终端**，检查（只显示是否已设置，不会显示 Key 本身）：
 
 ```bash
-for v in LDSDT_QWEN_API_KEY LDSDT_QWEN_BASE_URL DEEPSEEK_API_KEY; do [ -n "${(P)v}" ] && echo "$v 已设置" || echo "$v 未设置"; done
+for v in LDSDT_QWEN_API_KEY DEEPSEEK_API_KEY; do [ -n "${(P)v}" ] && echo "$v 已设置" || echo "$v 未设置"; done
 ```
 
 </TabItem>
 <TabItem label="Windows">
 
 1. 在开始菜单搜索「**编辑账户的环境变量**」并打开；
-2. 在「用户变量」一栏点「新建」，依次添加上表中的变量（B 需要三个，A 需要前两个）；
+2. 在「用户变量」一栏点「新建」，依次添加上表中的变量（B 需要两个，A 只需要第一个）；
 3. 点「确定」保存，然后**重新打开终端**。
 
 检查（只显示是否已设置，不会显示 Key 本身）：
 
 ```powershell
-"LDSDT_QWEN_API_KEY","LDSDT_QWEN_BASE_URL","DEEPSEEK_API_KEY" | ForEach-Object { if ([Environment]::GetEnvironmentVariable($_)) { "$_ 已设置" } else { "$_ 未设置" } }
+"LDSDT_QWEN_API_KEY","DEEPSEEK_API_KEY" | ForEach-Object { if ([Environment]::GetEnvironmentVariable($_)) { "$_ 已设置" } else { "$_ 未设置" } }
 ```
 
 </TabItem>
@@ -248,7 +249,7 @@ uv run ldsdt setup
 ```
 
 - `uv sync` 下载 Python 3.12 并在仓库里建立虚拟环境 `.venv`；
-- `ldsdt setup` 在 iCode 中生成名为 `ldsdt-qwen` 的模型配置（Key 从环境变量读取，不写进任何文件），同步智能体，最后运行一次环境检查。
+- `ldsdt setup` 在 iCode 中生成名为 `ldsdt-qwen` 的模型配置（课程网关的地址和请求头已经写好，Key 从环境变量读取，不写进任何文件），同步智能体，最后运行一次环境检查。
 
 以后随时可以单独运行环境检查：
 
@@ -294,19 +295,15 @@ uv run ldsdt doctor
 
    第一次启动时会弹出「数据收集授权」窗口，说明特供版希望收集你的 iCode 会话（提示词与模型回复、工具调用记录、错误日志），用于改进课程设计和相关研究。是否同意由你自己决定：拒绝不影响 iCode 的使用，也不影响成绩。之后可以随时用 `icode-zju-agent consent --grant`（同意）或 `icode-zju-agent consent --decline`（拒绝）修改。
 
-2. 按 **F4**（或点击底部的「f4 模型」），打开「模型配置」窗口，点「新建」，按下表填写后点「保存」：
+2. 按 **F4**（或点击底部的「f4 模型」），打开「模型配置」窗口。特供版已经预置了一份名为「**ZJU Gateway**」的配置（模型 `deepseek-v4.1-flash`，地址和请求头都已填好）。选中它并编辑，只改一项后保存：
 
-   | 字段           | 填写                                                                   |
-   | -------------- | ---------------------------------------------------------------------- |
-   | 配置名称       | `ds-flash`                                                             |
-   | 模型提供商     | DeepSeek（OpenAI），API 样式选 Chat Completions                        |
-   | 模型 ID        | `deepseek-flash`                                                       |
-   | 服务地址       | `https://api.deepseek.com/`                                            |
-   | API 密钥       | `{{DEEPSEEK_API_KEY}}`（原样填写这串文字，iCode 会从环境变量读取 Key） |
-   | 最大上下文窗口 | `1000000`                                                              |
-   | 最大输出词元数 | `384000`                                                               |
+   | 字段     | 填写                                                                   |
+   | -------- | ---------------------------------------------------------------------- |
+   | API 密钥 | `{{DEEPSEEK_API_KEY}}`（原样填写这串文字，iCode 会从环境变量读取 Key） |
 
-3. **把当前模型切换为 `ds-flash`**：在输入栏输入 `$` 选择模型，或在模型配置窗口中选中它。确认界面底部状态栏显示「模型 ds-flash」。模型列表里特供版预置的「ZJU Gateway」暂时不要使用。
+   其他字段保持不变。不要新建指向课程网关的配置：网关要求的请求头只能在预置配置里设置，自己新建的配置会被网关拒绝（HTTP 403）。
+
+3. **把当前模型切换为「ZJU Gateway」**：在输入栏输入 `$` 选择模型，或在模型配置窗口中选中它。确认界面底部状态栏显示「模型 ZJU Gateway」。
 
 4. 随便问一个问题（例如「这个仓库的目录结构是什么？」），确认能正常回复。
 
@@ -444,7 +441,7 @@ C 在本 Lab 不写代码，需要完成：
 ### `doctor` 中「Qwen 接口」未通过
 
 - `HTTP 401`：Key 不对，检查 `LDSDT_QWEN_API_KEY` 是否完整、有没有多余的空格或引号；
-- `HTTP 404`：地址不对，检查 `LDSDT_QWEN_BASE_URL` 是否与课程发放的完全一致；
+- `HTTP 403`：Key 没有权限，或者你用的不是最新的评测工具。先运行 `git pull upstream main` 更新，再运行 `uv run ldsdt setup`；仍然不行就联系助教；
 - `HTTP 429`：被限流，稍等片刻再试；
 - `无法连接`：检查网络。
 
