@@ -98,6 +98,14 @@ uv run ldsdt try <需求文档> --lab N
 
 通常是因为你改过 `ldsdt_kit/` 或 `tasks/` 下的文件。这些目录只应由课程更新：冲突的文件请保留课程的版本。如果冲突出现在你自己的文件里（例如 `README.md`），按普通的 Git 冲突处理。
 
+### `git pull upstream main` 提示 `Need to specify how to reconcile divergent branches`
+
+说明你的仓库和课程模版各有新的提交，而 Git 不知道该怎样合并。评测工具（`setup`、`doctor`、`grade`）会自动为你的仓库设置好，所以一般不会遇到。如果遇到了，这一次改用下面的命令：
+
+```bash
+git pull --no-rebase upstream main
+```
+
 ### 截止后还能提交吗
 
 可以迟交，每迟交 24 小时，该 Lab 的评测分乘以 0.9，最多迟交 3 天，见[评测与提交](../grading/#迟交)。
