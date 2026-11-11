@@ -429,6 +429,8 @@ C 在本 Lab 不写代码，需要完成：
 
 环境变量只在**新打开**的终端里生效。关掉所有终端窗口（包括编辑器里内嵌的终端）再开一个新的。macOS 上还要确认你改的是 `~/.zshrc`，并且保存了文件。
 
+macOS 上，AiWork 执行的命令不读取 `~/.zshrc`。`uv run ldsdt ...` 会自动从 `~/.zshrc` 补读 Key（`doctor` 会显示「已设置（从 ~/.zshrc 读取）」），但 AiWork 直接运行的 `icode-zju` 命令仍然读不到。需要手动运行工作流时，请用 `uv run ldsdt try`。
+
 ### 提示找不到 `icode-zju` 命令
 
 运行 `uv tool update-shell`，然后重新打开终端。如果仍然找不到，运行 `uv tool list` 确认列表中有 `icode-zju`；没有就按[第 2 步](#2-安装-icode课程特供版)重新安装。注意命令是 `icode-zju`，不是 `icode`。
