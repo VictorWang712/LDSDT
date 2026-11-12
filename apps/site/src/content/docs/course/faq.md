@@ -14,6 +14,9 @@ description: 安装、运行与调试、评测与提交、会话记录、模型�
 - [`doctor` 中「Qwen 接口」未通过](../../labs/lab-0/#doctor-中qwen-接口未通过)
 - [`ldsdt setup` 提示已有另一份名为 `ldsdt-qwen` 的模型配置](../../labs/lab-0/#ldsdt-setup-提示已有另一份名为-ldsdt-qwen-的模型配置)
 - [推送时提示输入密码或认证失败](../../labs/lab-0/#推送时提示输入密码或认证失败)
+- [`doctor` 中「系统不调用评测工具」未通过](../../labs/lab-0/#doctor-中系统不调用评测工具未通过)
+- [AiWork 的默认模型不是「auto-经济」](../../labs/lab-0/#aiwork-的默认模型不是auto-经济)
+- [AiWork 打不开或运行出错，想重置](../../labs/lab-0/#aiwork-打不开或运行出错想重置)
 - [下载很慢或失败](../../labs/lab-0/#下载很慢或失败)
 
 ## 运行与调试
